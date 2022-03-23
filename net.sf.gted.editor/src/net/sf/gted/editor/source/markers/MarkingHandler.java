@@ -53,10 +53,8 @@ public class MarkingHandler implements IErrorHandler {
 	/**
 	 * The Constructor.
 	 * 
-	 * @param file
-	 *            the file
-	 * @param document
-	 *            the document
+	 * @param file     the file
+	 * @param document the document
 	 */
 	public MarkingHandler(final IFile file, final IDocument document) {
 		super();
@@ -69,8 +67,7 @@ public class MarkingHandler implements IErrorHandler {
 	 */
 	public void removeExistingMarkers() {
 		try {
-			this.file.deleteMarkers(MarkingHandler.ERROR_MARKER_ID, true,
-					IResource.DEPTH_INFINITE);
+			this.file.deleteMarkers(MarkingHandler.ERROR_MARKER_ID, true, IResource.DEPTH_INFINITE);
 		} catch (final CoreException e) {
 			e.printStackTrace();
 		}
@@ -79,21 +76,16 @@ public class MarkingHandler implements IErrorHandler {
 	/**
 	 * Adds the error.
 	 * 
-	 * @param columnNumber
-	 *            the column number
-	 * @param error
-	 *            the error
-	 * @param lineNumber
-	 *            the line number
+	 * @param columnNumber the column number
+	 * @param error        the error
+	 * @param lineNumber   the line number
 	 */
-	public void addError(final String error, final int lineNumber,
-			final int columnNumber) {
+	public void addError(final String error, final int lineNumber, final int columnNumber) {
 	}
 
-	public void addMessage(final String message, final int lineNumber,
-			String severity) {
+	public void addMessage(final String message, final int lineNumber, String severity) {
 
-		final Map<String, Integer> map = new HashMap<String, Integer>();
+		final Map<String, Object> map = new HashMap<String, Object>();
 
 		if (lineNumber != 0) {
 			this.setLocation(lineNumber, map);
@@ -104,16 +96,13 @@ public class MarkingHandler implements IErrorHandler {
 		if (severity.equals(PreferenceConstants.P_ERROR)) {
 			map.put(IMarker.SEVERITY, Integer.valueOf(IMarker.SEVERITY_ERROR));
 		} else if (severity.equals(PreferenceConstants.P_WARN)) {
-			map
-					.put(IMarker.SEVERITY, Integer
-							.valueOf(IMarker.SEVERITY_WARNING));
+			map.put(IMarker.SEVERITY, Integer.valueOf(IMarker.SEVERITY_WARNING));
 		} else if (severity.equals(PreferenceConstants.P_INFO)) {
 			map.put(IMarker.SEVERITY, Integer.valueOf(IMarker.SEVERITY_INFO));
 		}
 
 		try {
-			MarkerUtilities.createMarker(this.file, map,
-					MarkingHandler.ERROR_MARKER_ID);
+			MarkerUtilities.createMarker(this.file, map, MarkingHandler.ERROR_MARKER_ID);
 		} catch (final CoreException ee) {
 			ee.printStackTrace();
 		}
@@ -124,8 +113,7 @@ public class MarkingHandler implements IErrorHandler {
 	 * @param lineNumber
 	 * @param map
 	 */
-	private void setLocation(final int lineNumber,
-			final Map<String, Integer> map) {
+	private void setLocation(final int lineNumber, final Map<String, Object> map) {
 		MarkerUtilities.setLineNumber(map, lineNumber);
 		map.put(IMarker.LOCATION, lineNumber);
 
@@ -142,22 +130,18 @@ public class MarkingHandler implements IErrorHandler {
 	/**
 	 * Gets the char end.
 	 * 
-	 * @param columnNumber
-	 *            the column number
-	 * @param lineNumber
-	 *            the line number
+	 * @param columnNumber the column number
+	 * @param lineNumber   the line number
 	 * @return the char end
 	 */
 	private Integer getCharEnd(final int lineNumber, final int columnNumber) {
 		try {
 			final int lineOffset = this.document.getLineOffset(lineNumber - 1);
-			final ITypedRegion typedRegion = this.document
-					.getPartition(lineOffset + columnNumber);
+			final ITypedRegion typedRegion = this.document.getPartition(lineOffset + columnNumber);
 			if (typedRegion == null) {
 				return Integer.valueOf(lineOffset);
 			} else {
-				return Integer.valueOf(typedRegion.getOffset()
-						+ typedRegion.getLength());
+				return Integer.valueOf(typedRegion.getOffset() + typedRegion.getLength());
 			}
 		} catch (final BadLocationException e) {
 			e.printStackTrace();
@@ -168,22 +152,19 @@ public class MarkingHandler implements IErrorHandler {
 	/**
 	 * Gets the char start.
 	 * 
-	 * @param columnNumber
-	 *            the column number
-	 * @param lineNumber
-	 *            the line number
+	 * @param columnNumber the column number
+	 * @param lineNumber   the line number
 	 * @return the char start
 	 */
 	private Integer getCharStart(final int lineNumber, final int columnNumber) {
 
 		try {
 			final int lineOffset = this.document.getLineOffset(lineNumber - 1);
-			final ITypedRegion typedRegion = this.document
-					.getPartition(lineOffset + columnNumber);
+			final ITypedRegion typedRegion = this.document.getPartition(lineOffset + columnNumber);
 			if (typedRegion == null) {
-				return new Integer(lineOffset);
+				return lineOffset;
 			} else {
-				return new Integer(typedRegion.getOffset());
+				return typedRegion.getOffset();
 			}
 		} catch (final BadLocationException e) {
 			e.printStackTrace();

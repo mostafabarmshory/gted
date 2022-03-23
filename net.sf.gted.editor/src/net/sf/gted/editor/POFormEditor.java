@@ -11,6 +11,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.SWT;
@@ -83,9 +84,8 @@ public class POFormEditor extends FormEditor implements IResourceChangeListener 
 	}
 
 	private void choseActiveView() {
-		final String initalView = POFileEditorPlugin.getDefault()
-				.getPreferenceStore().getString(
-						PreferenceConstants.P_EDITOR_VIEW);
+		final String initalView = POFileEditorPlugin.getDefault().getPreferenceStore()
+				.getString(PreferenceConstants.P_EDITOR_VIEW);
 		if (initalView.equals(PreferenceConstants.P_EDITOR_VIEW_UI)) {
 			this.setActivePage(UI_VIEW);
 		} else if (initalView.equals(PreferenceConstants.P_EDITOR_VIEW_SOURCE)) {
@@ -123,15 +123,12 @@ public class POFormEditor extends FormEditor implements IResourceChangeListener 
 			Display.getDefault().asyncExec(new Runnable() {
 
 				public void run() {
-					final IWorkbenchPage[] pages = POFormEditor.this.getSite()
-							.getWorkbenchWindow().getPages();
+					final IWorkbenchPage[] pages = POFormEditor.this.getSite().getWorkbenchWindow().getPages();
 					for (final IWorkbenchPage element : pages) {
-						if (((FileEditorInput) POFormEditor.this.poEditor
-								.getEditorInput()).getFile().getProject()
+						if (((FileEditorInput) POFormEditor.this.poEditor.getEditorInput()).getFile().getProject()
 								.equals(event.getResource())) {
 							final IEditorPart editorPart = element
-									.findEditor(POFormEditor.this.poEditor
-											.getEditorInput());
+									.findEditor(POFormEditor.this.poEditor.getEditorInput());
 							element.closeEditor(editorPart, true);
 						}
 					}
@@ -143,8 +140,7 @@ public class POFormEditor extends FormEditor implements IResourceChangeListener 
 	/**
 	 * Goto marker.
 	 * 
-	 * @param marker
-	 *            the marker
+	 * @param marker the marker
 	 */
 	public void gotoMarker(final IMarker marker) {
 		this.setActivePage(POFormEditor.SOURCE_VIEW);
@@ -152,8 +148,7 @@ public class POFormEditor extends FormEditor implements IResourceChangeListener 
 	}
 
 	@Override
-	public void init(final IEditorSite site, final IEditorInput editorInput)
-			throws PartInitException {
+	public void init(final IEditorSite site, final IEditorInput editorInput) throws PartInitException {
 		// if (!(editorInput instanceof IFileEditorInput)) {
 		// throw new
 		// PartInitException("Invalid Input: Must be IFileEditorInput");
@@ -166,8 +161,7 @@ public class POFormEditor extends FormEditor implements IResourceChangeListener 
 	 */
 	public void updateEditor() {
 		if (this.changed) {
-			final IDocument doc = this.poEditor.getDocumentProvider()
-					.getDocument(this.poEditor.getEditorInput());
+			final IDocument doc = this.poEditor.getDocumentProvider().getDocument(this.poEditor.getEditorInput());
 			doc.set(this.poEditor.getFile().toString());
 			this.changed = false;
 		}
@@ -194,9 +188,8 @@ public class POFormEditor extends FormEditor implements IResourceChangeListener 
 	 * @param message
 	 */
 	public void showWarningMessageBox(final String message) {
-		final MessageBox box = new MessageBox(Display.getDefault()
-				.getActiveShell(), SWT.ICON_WARNING | SWT.OK
-				| SWT.PRIMARY_MODAL);
+		final MessageBox box = new MessageBox(Display.getDefault().getActiveShell(),
+				SWT.ICON_WARNING | SWT.OK | SWT.PRIMARY_MODAL);
 		box.setText("Warning");
 		box.setMessage(message);
 		box.open();
@@ -217,20 +210,23 @@ public class POFormEditor extends FormEditor implements IResourceChangeListener 
 		this.masterDetailsPage.refresh();
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Object getAdapter(Class required) {
-		if (IContentOutlinePage.class.equals(required)) {
+	public <T> T getAdapter(Class<T> adapter) {
+		T result = super.getAdapter(adapter);
+		if (IContentOutlinePage.class.equals(adapter) && Display.getCurrent() != null) {
+
 			if (outlinePage == null) {
 				outlinePage = new POOutlinePage(this);
 				if (getEditorInput() != null) {
 					outlinePage.setInput(getEditorInput());
 				}
 			}
-			return outlinePage;
-		}
-		return super.getAdapter(required);
 
+			if (outlinePage != null) {
+				result = Adapters.adapt(outlinePage, adapter);
+			}
+		}
+		return result;
 	}
 
 	public void showSourceEditor() {

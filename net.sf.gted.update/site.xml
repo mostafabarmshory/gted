@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
    <description url="http://www.gted.org/update/">
-      gted (GetText EDitor) Update Site
+      GTED (GetText EDitor) Update Site
    </description>
    <feature url="http://www.gted.org/update/features/net.sf.gted.feature_1.8.0.jar" id="net.sf.gted.feature" version="1.8.0">
       <category name="gted"/>

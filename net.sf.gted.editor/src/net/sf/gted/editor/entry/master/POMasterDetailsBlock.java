@@ -115,14 +115,11 @@ public class POMasterDetailsBlock extends MasterDetailsBlock {
 	 * @param parent
 	 */
 	@Override
-	protected void createMasterPart(final IManagedForm managedForm,
-			Composite parent) {
+	protected void createMasterPart(final IManagedForm managedForm, Composite parent) {
 		FormToolkit toolkit = managedForm.getToolkit();
 
-		final Section entriesSection = toolkit.createSection(parent,
-				Section.EXPANDED | Section.TITLE_BAR);
-		entriesSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
-				true));
+		final Section entriesSection = toolkit.createSection(parent, Section.EXPANDED | Section.TITLE_BAR);
+		entriesSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
 		entriesSection.setText("Entries");
 		entriesSection.marginWidth = 7;
 		entriesSection.marginHeight = 7;
@@ -135,8 +132,7 @@ public class POMasterDetailsBlock extends MasterDetailsBlock {
 		composite = toolkit.createComposite(entriesSection, SWT.WRAP);
 		composite.setLayout(layout);
 
-		filterFuzzyButton = toolkit.createButton(composite,
-				"Show only fuzzy entries", SWT.CHECK);
+		filterFuzzyButton = toolkit.createButton(composite, "Show only fuzzy entries", SWT.CHECK);
 		filterFuzzyButton.addSelectionListener(new SelectionListener() {
 
 			public void widgetDefaultSelected(final SelectionEvent e) {
@@ -156,8 +152,7 @@ public class POMasterDetailsBlock extends MasterDetailsBlock {
 
 		});
 
-		filterUntranslatedButton = toolkit.createButton(composite,
-				"Show only untranslated entries", SWT.CHECK);
+		filterUntranslatedButton = toolkit.createButton(composite, "Show only untranslated entries", SWT.CHECK);
 		filterUntranslatedButton.addSelectionListener(new SelectionListener() {
 
 			public void widgetDefaultSelected(final SelectionEvent e) {
@@ -177,8 +172,7 @@ public class POMasterDetailsBlock extends MasterDetailsBlock {
 
 		});
 
-		table = toolkit.createTable(composite, SWT.FULL_SELECTION
-				| SWT.HIDE_SELECTION);
+		table = toolkit.createTable(composite, SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
@@ -254,18 +248,15 @@ public class POMasterDetailsBlock extends MasterDetailsBlock {
 	 * @param managedForm
 	 * @param spart
 	 */
-	private void createViewer(final IManagedForm managedForm,
-			final SectionPart spart) {
+	private void createViewer(final IManagedForm managedForm, final SectionPart spart) {
 		viewer = new TableViewer(table);
 		viewer.setUseHashlookup(true);
 		viewer.setColumnProperties(this.columnNames);
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			public void selectionChanged(SelectionChangedEvent event) {
-				IStructuredSelection selection = (IStructuredSelection) event
-						.getSelection();
-				for (final Iterator<?> iter = selection.iterator(); iter
-						.hasNext();) {
+				IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+				for (final Iterator<?> iter = selection.iterator(); iter.hasNext();) {
 					final Object object = iter.next();
 					if (object instanceof POEntry) {
 						selectedEntry = (POEntry) object;
@@ -310,8 +301,7 @@ public class POMasterDetailsBlock extends MasterDetailsBlock {
 		};
 		vaction.setChecked(vertical);
 		vaction.setToolTipText("vertical");
-		vaction.setImageDescriptor(POFileEditorPlugin
-				.getImageDescriptor("icons/th_vertical.gif"));
+		vaction.setImageDescriptor(POFileEditorPlugin.getImageDescriptor("icons/th_vertical.gif"));
 
 		Action haction = new Action("hor", Action.AS_RADIO_BUTTON) {
 
@@ -321,8 +311,7 @@ public class POMasterDetailsBlock extends MasterDetailsBlock {
 		};
 		haction.setChecked(horizontal);
 		haction.setToolTipText("horizontal");
-		haction.setImageDescriptor(POFileEditorPlugin
-				.getImageDescriptor("icons/th_horizontal.gif"));
+		haction.setImageDescriptor(POFileEditorPlugin.getImageDescriptor("icons/th_horizontal.gif"));
 
 		form.getToolBarManager().add(haction);
 		form.getToolBarManager().add(vaction);
@@ -330,8 +319,7 @@ public class POMasterDetailsBlock extends MasterDetailsBlock {
 
 	private void createPopupMenu() {
 		MenuManager popupMenu = new MenuManager();
-		IProject project = this.getPage().getEditor().getPoEditor().getIFile()
-				.getProject();
+		IProject project = this.getPage().getEditor().getPoEditor().getIFile().getProject();
 		IAction newRowAction = new RenameMsgidAction(this, project);
 		popupMenu.add(newRowAction);
 		Menu menu = popupMenu.createContextMenu(table);
@@ -341,8 +329,7 @@ public class POMasterDetailsBlock extends MasterDetailsBlock {
 	/**
 	 * Creates the sort.
 	 * 
-	 * @param column
-	 *            the column
+	 * @param column the column
 	 */
 	private void createSort(final int column) {
 		boolean up;
@@ -353,7 +340,7 @@ public class POMasterDetailsBlock extends MasterDetailsBlock {
 			table.setSortDirection(SWT.DOWN);
 			up = false;
 		}
-		viewer.setSorter(new EntrySorter(up, column));
+		viewer.setComparator(new EntrySorter(up, column));
 	}
 
 	/**
@@ -364,8 +351,8 @@ public class POMasterDetailsBlock extends MasterDetailsBlock {
 	}
 
 	/**
-   * 
-   */
+	* 
+	*/
 	public void refresh() {
 		if (this.viewer != null) {
 			this.viewer.refresh();
@@ -380,9 +367,8 @@ public class POMasterDetailsBlock extends MasterDetailsBlock {
 
 	@Override
 	public void createContent(IManagedForm managedForm) {
-		final String orientation = POFileEditorPlugin.getDefault()
-				.getPreferenceStore().getString(
-						PreferenceConstants.P_ORIENTATION);
+		final String orientation = POFileEditorPlugin.getDefault().getPreferenceStore()
+				.getString(PreferenceConstants.P_ORIENTATION);
 		if (orientation.equals(PreferenceConstants.P_ORIENTATION_VERTICAL)) {
 			vertical = true;
 			horizontal = false;

@@ -24,7 +24,7 @@ import org.eclipse.jface.viewers.ContentViewer;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 
 /**
  * Sorter
@@ -32,9 +32,8 @@ import org.eclipse.jface.viewers.ViewerSorter;
  * @author $Author: simas_ch $
  * @version $Revision: 1.3 $, $Date: 2008/08/12 13:32:38 $
  */
-public class NameSorter extends ViewerSorter {
+public class NameSorter extends ViewerComparator {
 
-	@SuppressWarnings("unchecked")
 	public int compare(final Viewer viewer, final Object e1, final Object e2) {
 
 		if (e1 instanceof POEntry) {
@@ -50,8 +49,7 @@ public class NameSorter extends ViewerSorter {
 				name1 = e1.toString();
 				name2 = e2.toString();
 			} else {
-				final IBaseLabelProvider prov = ((ContentViewer) viewer)
-						.getLabelProvider();
+				final IBaseLabelProvider prov = ((ContentViewer) viewer).getLabelProvider();
 				if (prov instanceof ILabelProvider) {
 					final ILabelProvider lprov = (ILabelProvider) prov;
 					name1 = lprov.getText(e1);

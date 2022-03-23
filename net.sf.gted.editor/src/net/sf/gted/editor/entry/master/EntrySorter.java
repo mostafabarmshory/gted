@@ -18,11 +18,11 @@
  */
 package net.sf.gted.editor.entry.master;
 
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
+
 import net.sf.gted.model.POEntry;
 import net.sf.gted.model.POEntrySingular;
-
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
 
 /**
  * Sorter.
@@ -30,7 +30,7 @@ import org.eclipse.jface.viewers.ViewerSorter;
  * @author $Author: simas_ch $
  * @version $Revision: 1.4 $, $Date: 2008/08/12 13:32:38 $
  */
-class EntrySorter extends ViewerSorter {
+class EntrySorter extends ViewerComparator {
 
 	/** The Constant SORT_FUZZY. */
 	public static final int SORT_FUZZY = 0;
@@ -71,7 +71,6 @@ class EntrySorter extends ViewerSorter {
 	 *            the e1
 	 * @return the int
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public int compare(final Viewer viewer, final Object e1, final Object e2) {
 		final POEntry entry1 = (POEntry) e1;

@@ -32,10 +32,8 @@ public class POOutlinePage extends ContentOutlinePage {
 	private UntranslatedFilter untranslatedFilter;
 	private FuzzyFilter fuzzyFilter;
 
-	private final ImageDescriptor imageSort = POFileEditorPlugin
-			.getImageDescriptor("icons/alphab_sort_co.gif");
-	private final ImageDescriptor imageFuzzy = POFileEditorPlugin
-			.getImageDescriptor("icons/entry_fuzzy.gif");
+	private final ImageDescriptor imageSort = POFileEditorPlugin.getImageDescriptor("icons/alphab_sort_co.gif");
+	private final ImageDescriptor imageFuzzy = POFileEditorPlugin.getImageDescriptor("icons/entry_fuzzy.gif");
 	private final ImageDescriptor imageUntranslated = POFileEditorPlugin
 			.getImageDescriptor("icons/entry_untranslated.gif");
 
@@ -57,10 +55,10 @@ public class POOutlinePage extends ContentOutlinePage {
 
 			public void run() {
 				if (getTreeViewer().getSorter() == null) {
-					getTreeViewer().setSorter(nameSorter);
+					getTreeViewer().setComparator(nameSorter);
 					nameSortAction.setChecked(true);
 				} else {
-					getTreeViewer().setSorter(null);
+					getTreeViewer().setComparator(null);
 					nameSortAction.setChecked(false);
 				}
 			}
@@ -86,15 +84,11 @@ public class POOutlinePage extends ContentOutlinePage {
 				}
 			}
 		};
-		this.untranslatedFilterAction
-				.setDescription("Show only untranslated entries");
-		this.untranslatedFilterAction
-				.setToolTipText("Show only untranslated entries");
+		this.untranslatedFilterAction.setDescription("Show only untranslated entries");
+		this.untranslatedFilterAction.setToolTipText("Show only untranslated entries");
 		this.untranslatedFilterAction.setChecked(false);
-		this.untranslatedFilterAction
-				.setImageDescriptor(this.imageUntranslated);
-		this.getSite().getActionBars().getToolBarManager().add(
-				untranslatedFilterAction);
+		this.untranslatedFilterAction.setImageDescriptor(this.imageUntranslated);
+		this.getSite().getActionBars().getToolBarManager().add(untranslatedFilterAction);
 
 		this.fuzzyFilter = new FuzzyFilter();
 		this.fuzzyFilterAction = new Action("Fuzzy") {
@@ -115,8 +109,7 @@ public class POOutlinePage extends ContentOutlinePage {
 		this.fuzzyFilterAction.setToolTipText("Show only fuzzy entries");
 		this.fuzzyFilterAction.setChecked(false);
 		this.fuzzyFilterAction.setImageDescriptor(this.imageFuzzy);
-		this.getSite().getActionBars().getToolBarManager().add(
-				fuzzyFilterAction);
+		this.getSite().getActionBars().getToolBarManager().add(fuzzyFilterAction);
 	}
 
 	public void selectionChanged(SelectionChangedEvent event) {
@@ -128,10 +121,8 @@ public class POOutlinePage extends ContentOutlinePage {
 			POEntry entry = (POEntry) structuredSelection.getFirstElement();
 			int lineOffset;
 			try {
-				lineOffset = this.editor.getPoEditor().getInputDocument()
-						.getLineOffset(entry.getLine() - 1);
-				this.editor.getPoEditor().setHighlightRange(lineOffset,
-						entry.getMsgId().length(), true);
+				lineOffset = this.editor.getPoEditor().getInputDocument().getLineOffset(entry.getLine() - 1);
+				this.editor.getPoEditor().setHighlightRange(lineOffset, entry.getMsgId().length(), true);
 				this.editor.showSourceEditor();
 			} catch (BadLocationException e) {
 				e.printStackTrace();
